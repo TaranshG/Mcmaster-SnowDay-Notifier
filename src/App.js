@@ -723,7 +723,7 @@ export default function SnowDayAlertSystem() {
                 We've sent a verification email to<br />
                 <strong style={{color: '#3b82f6', fontSize: '18px'}}>{submittedEmail}</strong>
                 <br /><br />
-                Please check your spam folder and click the link to activate your snow day alerts.
+                Click the link to activate your snow day alerts. If you don’t see the email, please check your spam folder :D
               </p>
               <button
                 onClick={() => setView('signup')}
