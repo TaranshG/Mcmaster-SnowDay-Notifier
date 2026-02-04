@@ -101,7 +101,7 @@ export default function SnowDayAlertSystem() {
   };
 
   const copyLink = () => {
-    const url = 'https://tinyurl.com/McmasterSnowDays';
+    const url = 'https://tinyurl.com/McMasterSnowDay';
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
