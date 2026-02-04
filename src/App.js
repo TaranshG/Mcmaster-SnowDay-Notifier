@@ -681,6 +681,9 @@ export default function SnowDayAlertSystem() {
                   TaranshG.Dev@gmail.com
                 </a>
               </p>
+              <p style={{ fontSize: '12px', color: '#1e40af' }}>
+                This is a student-run project and is independent of McMaster University :D
+              </p>
               {/* Builder credit */}
               <div style={{
                 marginTop: '28px',
