@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { AlertCircle, Bell, CheckCircle, Snowflake, Volume2, VolumeX, Share2, X, Copy, Check, Linkedin } from 'lucide-react';
+import { Bell, CheckCircle, Snowflake, Volume2, VolumeX, Share2, X, Copy, Check, Linkedin } from 'lucide-react';
 
 export default function SnowDayAlertSystem() {
   const [isSubmitting, setIsSubmitting] = useState(false);
