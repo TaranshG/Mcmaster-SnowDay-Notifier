@@ -60,7 +60,6 @@ export default function SnowDayAlertSystem() {
     
     if (!formData.consent) {
       setError('Please check the consent box to receive alerts.');
-      // Scroll to consent checkbox
       const consentCheckbox = document.getElementById('consent-checkbox');
       if (consentCheckbox) {
         consentCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -91,7 +90,6 @@ export default function SnowDayAlertSystem() {
           setSubmittedEmail(formData.email);
           setView('success');
           setFormData({ email: '', phone: '', consent: false });
-          // Scroll to top smoothly
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
           setError(data.error || 'Something went wrong');
@@ -136,7 +134,7 @@ export default function SnowDayAlertSystem() {
   const styles = {
     container: {
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #1e3a8a 0%, #4c1d95 50%, #581c87 100%)',
+      background: 'linear-gradient(135deg, #0f2744 0%, #7093a9 50%, #2d5a7b 100%)',
       position: 'relative',
       overflow: 'hidden'
     },
@@ -146,10 +144,10 @@ export default function SnowDayAlertSystem() {
       left: '40px',
       width: '384px',
       height: '384px',
-      background: '#60a5fa',
+      background: '#4a90b8',
       borderRadius: '50%',
       filter: 'blur(80px)',
-      opacity: '0.3',
+      opacity: '0.25',
       animation: 'blob 7s infinite'
     },
     blob2: {
@@ -158,10 +156,10 @@ export default function SnowDayAlertSystem() {
       right: '40px',
       width: '384px',
       height: '384px',
-      background: '#c084fc',
+      background: '#5fa3c7',
       borderRadius: '50%',
       filter: 'blur(80px)',
-      opacity: '0.3',
+      opacity: '0.25',
       animation: 'blob 7s infinite 2s'
     },
     blob3: {
@@ -170,10 +168,10 @@ export default function SnowDayAlertSystem() {
       left: '80px',
       width: '384px',
       height: '384px',
-      background: '#818cf8',
+      background: '#3b7ea1',
       borderRadius: '50%',
       filter: 'blur(80px)',
-      opacity: '0.3',
+      opacity: '0.25',
       animation: 'blob 7s infinite 4s'
     },
     controlButtons: {
@@ -185,11 +183,11 @@ export default function SnowDayAlertSystem() {
       gap: '8px'
     },
     controlButton: {
-      background: 'rgba(255, 255, 255, 0.2)',
+      background: 'rgba(255, 255, 255, 0.15)',
       backdropFilter: 'blur(12px)',
       padding: '12px',
       borderRadius: '50%',
-      border: '1px solid rgba(255, 255, 255, 0.3)',
+      border: '1px solid rgba(255, 255, 255, 0.25)',
       cursor: 'pointer',
       transition: 'all 0.3s',
       boxShadow: '0 10px 25px rgba(0,0,0,0.2)'
@@ -200,7 +198,7 @@ export default function SnowDayAlertSystem() {
       top: '50%',
       transform: 'translateY(-50%)',
       zIndex: 40,
-      background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
+      background: 'linear-gradient(135deg, #1e6b96 0%, #2b7fa8 100%)',
       padding: '16px 8px',
       borderRadius: '12px 0 0 12px',
       cursor: 'pointer',
@@ -213,11 +211,11 @@ export default function SnowDayAlertSystem() {
       bottom: '24px',
       right: '24px',
       zIndex: 40,
-      background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
+      background: 'linear-gradient(135deg, #1e6b96 0%, #2b7fa8 100%)',
       padding: '16px',
       borderRadius: '50%',
       cursor: 'pointer',
-      boxShadow: '0 8px 25px rgba(59, 130, 246, 0.4)',
+      boxShadow: '0 8px 25px rgba(30, 107, 150, 0.4)',
       transition: 'all 0.3s',
       display: 'flex',
       alignItems: 'center',
@@ -230,7 +228,7 @@ export default function SnowDayAlertSystem() {
       height: '100vh',
       width: '100%',
       maxWidth: '400px',
-      background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%)',
+      background: 'linear-gradient(135deg, rgba(255,255,255,0.97) 0%, rgba(250,250,250,0.95) 100%)',
       backdropFilter: 'blur(20px)',
       boxShadow: '-10px 0 50px rgba(0,0,0,0.3)',
       zIndex: 100,
@@ -246,8 +244,8 @@ export default function SnowDayAlertSystem() {
       position: 'relative',
       zIndex: 10,
       backdropFilter: 'blur(12px)',
-      background: 'rgba(255, 255, 255, 0.1)',
-      borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
+      background: 'rgba(255, 255, 255, 0.08)',
+      borderBottom: '1px solid rgba(255, 255, 255, 0.15)'
     },
     headerContent: {
       maxWidth: '900px',
@@ -263,7 +261,7 @@ export default function SnowDayAlertSystem() {
       gap: '16px'
     },
     logoIcon: {
-      background: 'linear-gradient(135deg, #60a5fa 0%, #2563eb 100%)',
+      background: 'linear-gradient(135deg, #2b7fa8 0%, #1e6b96 100%)',
       padding: '12px',
       borderRadius: '16px',
       boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
@@ -277,7 +275,7 @@ export default function SnowDayAlertSystem() {
     },
     subtitle: {
       fontSize: '14px',
-      color: '#bfdbfe'
+      color: '#c7e0ed'
     },
     main: {
       position: 'relative',
@@ -287,14 +285,14 @@ export default function SnowDayAlertSystem() {
       padding: '48px 24px'
     },
     card: {
-      background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%)',
+      background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%)',
       backdropFilter: 'blur(20px)',
       borderRadius: '24px',
       padding: '48px',
       maxWidth: '600px',
       margin: '0 auto',
-      boxShadow: '0 25px 50px rgba(0,0,0,0.3)',
-      border: '1px solid rgba(255,255,255,0.3)',
+      boxShadow: '0 25px 50px rgba(0,0,0,0.25)',
+      border: '1px solid rgba(255,255,255,0.4)',
       animation: 'slideUp 0.5s ease-out'
     },
     formGroup: {
@@ -314,7 +312,7 @@ export default function SnowDayAlertSystem() {
     input: {
       width: '100%',
       padding: '14px 16px',
-      border: '2px solid #e5e7eb',
+      border: '2px solid #d1d5db',
       borderRadius: '12px',
       fontSize: '16px',
       transition: 'all 0.3s',
@@ -322,7 +320,7 @@ export default function SnowDayAlertSystem() {
     },
     submitButton: {
       width: '100%',
-      background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
+      background: 'linear-gradient(135deg, #1e6b96 0%, #2b7fa8 100%)',
       color: 'white',
       padding: '18px',
       borderRadius: '16px',
@@ -330,7 +328,7 @@ export default function SnowDayAlertSystem() {
       fontSize: '18px',
       fontWeight: 'bold',
       cursor: 'pointer',
-      boxShadow: '0 20px 40px rgba(59, 130, 246, 0.4)',
+      boxShadow: '0 20px 40px rgba(30, 107, 150, 0.3)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -340,7 +338,7 @@ export default function SnowDayAlertSystem() {
     },
     copyButton: {
       width: '100%',
-      background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+      background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
       color: 'white',
       padding: '14px 24px',
       borderRadius: '12px',
@@ -400,14 +398,6 @@ export default function SnowDayAlertSystem() {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-10px); }
         }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-        @keyframes shimmer {
-          0% { background-position: -1000px 0; }
-          100% { background-position: 1000px 0; }
-        }
         .snowflake {
           position: fixed;
           top: -10px;
@@ -419,34 +409,29 @@ export default function SnowDayAlertSystem() {
           box-sizing: border-box;
         }
         
-        /* Smooth scrolling */
         html {
           scroll-behavior: smooth;
         }
         
-        /* Focus states for accessibility */
         input:focus, button:focus, a:focus {
-          outline: 3px solid #60a5fa;
+          outline: 3px solid #2b7fa8;
           outline-offset: 2px;
         }
         
-        /* Input focus enhancement */
         input:focus {
-          border-color: #3b82f6 !important;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+          border-color: #1e6b96 !important;
+          box-shadow: 0 0 0 3px rgba(30, 107, 150, 0.15);
         }
         
-        /* Button hover states */
         button:not(:disabled):hover {
           transform: translateY(-2px);
-          box-shadow: 0 25px 50px rgba(59, 130, 246, 0.5);
+          box-shadow: 0 25px 50px rgba(30, 107, 150, 0.4);
         }
         
         button:not(:disabled):active {
           transform: translateY(0);
         }
         
-        /* Loading spinner */
         @keyframes spin {
           to { transform: rotate(360deg); }
         }
@@ -460,12 +445,10 @@ export default function SnowDayAlertSystem() {
           animation: spin 0.6s linear infinite;
         }
         
-        /* Checkbox custom styling */
         input[type="checkbox"] {
-          accent-color: #3b82f6;
+          accent-color: #1e6b96;
         }
         
-        /* Desktop styles */
         @media (min-width: 1024px) {
           .share-tab-desktop {
             display: block !important;
@@ -475,7 +458,6 @@ export default function SnowDayAlertSystem() {
           }
         }
         
-        /* Mobile styles */
         @media (max-width: 1023px) {
           .share-button-mobile {
             display: flex !important;
@@ -485,171 +467,44 @@ export default function SnowDayAlertSystem() {
           }
         }
 
-        /* Mobile optimizations */
         @media (max-width: 768px) {
-          .mobile-header-content {
-            padding: 16px 16px !important;
-          }
-          
-          .mobile-logo-icon {
-            padding: 10px !important;
-          }
-          
-          .mobile-logo-icon svg {
-            width: 24px !important;
-            height: 24px !important;
-          }
-          
-          .mobile-title {
-            font-size: 20px !important;
-          }
-          
-          .mobile-subtitle {
-            font-size: 12px !important;
-          }
-          
-          .mobile-main {
-            padding: 24px 16px !important;
-            padding-bottom: 100px !important;
-          }
-          
-          .mobile-card {
-            padding: 24px !important;
-            border-radius: 20px !important;
-          }
-          
-          .mobile-card-title {
-            font-size: 24px !important;
-          }
-          
-          .mobile-card-subtitle {
-            font-size: 14px !important;
-            margin-bottom: 24px !important;
-          }
-          
-          .mobile-form-group {
-            margin-bottom: 20px !important;
-          }
-          
-          .mobile-label {
-            font-size: 12px !important;
-            margin-bottom: 6px !important;
-          }
-          
-          .mobile-input {
-            padding: 12px 14px !important;
-            font-size: 16px !important;
-          }
-          
-          .mobile-helper-text {
-            font-size: 11px !important;
-            margin-top: 6px !important;
-          }
-          
-          .mobile-submit-button {
-            padding: 16px !important;
-            font-size: 16px !important;
-          }
-          
-          .mobile-info-box {
-            padding: 16px !important;
-            margin-top: 24px !important;
-          }
-          
-          .mobile-info-text {
-            font-size: 13px !important;
-          }
-          
-          .mobile-control-buttons {
-            top: 12px !important;
-            right: 12px !important;
-            gap: 6px !important;
-          }
-          
-          .mobile-control-button {
-            padding: 10px !important;
-          }
-          
-          .mobile-control-button svg {
-            width: 20px !important;
-            height: 20px !important;
-          }
-          
-          .mobile-share-panel {
-            padding: 24px !important;
-          }
-          
-          .mobile-share-title {
-            font-size: 24px !important;
-            margin-bottom: 24px !important;
-          }
-          
-          .mobile-qr-container {
-            width: 200px !important;
-            height: 200px !important;
-            padding: 16px !important;
-            margin-bottom: 24px !important;
-          }
-          
-          .mobile-qr-img {
-            width: 168px !important;
-            height: 168px !important;
-          }
-          
-          .mobile-url-text {
-            font-size: 16px !important;
-            padding: 12px 16px !important;
-          }
-          
-          .mobile-success-icon {
-            width: 60px !important;
-            height: 60px !important;
-            margin-bottom: 20px !important;
-          }
-          
-          .mobile-success-title {
-            font-size: 28px !important;
-            margin-bottom: 12px !important;
-          }
-          
-          .mobile-success-text {
-            font-size: 14px !important;
-            margin-bottom: 24px !important;
-          }
-          
-          .mobile-security-modal {
-            padding: 24px !important;
-            max-width: 95% !important;
-          }
-          
-          .mobile-security-title {
-            font-size: 20px !important;
-          }
-          
-          .mobile-security-content {
-            font-size: 14px !important;
-          }
+          .mobile-header-content { padding: 16px 16px !important; }
+          .mobile-logo-icon { padding: 10px !important; }
+          .mobile-logo-icon svg { width: 24px !important; height: 24px !important; }
+          .mobile-title { font-size: 20px !important; }
+          .mobile-subtitle { font-size: 12px !important; }
+          .mobile-main { padding: 24px 16px !important; padding-bottom: 100px !important; }
+          .mobile-card { padding: 24px !important; border-radius: 20px !important; }
+          .mobile-card-title { font-size: 24px !important; }
+          .mobile-card-subtitle { font-size: 14px !important; margin-bottom: 24px !important; }
+          .mobile-form-group { margin-bottom: 20px !important; }
+          .mobile-label { font-size: 12px !important; margin-bottom: 6px !important; }
+          .mobile-input { padding: 12px 14px !important; font-size: 16px !important; }
+          .mobile-helper-text { font-size: 11px !important; margin-top: 6px !important; }
+          .mobile-submit-button { padding: 16px !important; font-size: 16px !important; }
+          .mobile-info-box { padding: 16px !important; margin-top: 24px !important; }
+          .mobile-info-text { font-size: 13px !important; }
+          .mobile-control-buttons { top: 12px !important; right: 12px !important; gap: 6px !important; }
+          .mobile-control-button { padding: 10px !important; }
+          .mobile-control-button svg { width: 20px !important; height: 20px !important; }
+          .mobile-share-panel { padding: 24px !important; }
+          .mobile-share-title { font-size: 24px !important; margin-bottom: 24px !important; }
+          .mobile-qr-container { width: 200px !important; height: 200px !important; padding: 16px !important; margin-bottom: 24px !important; }
+          .mobile-qr-img { width: 168px !important; height: 168px !important; }
+          .mobile-url-text { font-size: 16px !important; padding: 12px 16px !important; }
+          .mobile-success-icon { width: 60px !important; height: 60px !important; margin-bottom: 20px !important; }
+          .mobile-success-title { font-size: 28px !important; margin-bottom: 12px !important; }
+          .mobile-success-text { font-size: 14px !important; margin-bottom: 24px !important; }
+          .mobile-security-modal { padding: 24px !important; max-width: 95% !important; }
+          .mobile-security-title { font-size: 20px !important; }
+          .mobile-security-content { font-size: 14px !important; }
         }
 
-        /* Extra small screens */
         @media (max-width: 400px) {
-          .mobile-card-title {
-            font-size: 22px !important;
-          }
-          
-          .mobile-title {
-            font-size: 18px !important;
-          }
-          
-          .mobile-qr-container {
-            width: 180px !important;
-            height: 180px !important;
-          }
-          
-          .mobile-qr-img {
-            width: 148px !important;
-            height: 148px !important;
-          }
+          .mobile-card-title { font-size: 22px !important; }
+          .mobile-title { font-size: 18px !important; }
+          .mobile-qr-container { width: 180px !important; height: 180px !important; }
+          .mobile-qr-img { width: 148px !important; height: 148px !important; }
         }
       `}</style>
 
@@ -697,7 +552,6 @@ export default function SnowDayAlertSystem() {
         </button>
       </div>
 
-      {/* Scroll hint - desktop only */}
       {view === 'signup' && (
         <div 
           style={styles.scrollHint} 
@@ -764,7 +618,7 @@ export default function SnowDayAlertSystem() {
           <X size={24} color="#6b7280" />
         </button>
 
-        <Snowflake size={48} color="#3b82f6" style={{marginBottom: '24px'}} />
+        <Snowflake size={48} color="#1e6b96" style={{marginBottom: '24px'}} />
         
         <h2 className="mobile-share-title" style={{
           fontSize: '28px',
@@ -806,15 +660,15 @@ export default function SnowDayAlertSystem() {
         </p>
         
         <div style={{
-          background: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+          background: 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%)',
           padding: '16px 24px',
           borderRadius: '12px',
-          border: '2px solid #3b82f6'
+          border: '2px solid #1e6b96'
         }}>
           <p className="mobile-url-text" style={{
             fontSize: '20px',
             fontWeight: 'bold',
-            color: '#1e40af',
+            color: '#0c4a6e',
             fontFamily: 'monospace',
             wordBreak: 'break-all'
           }}>
@@ -869,7 +723,6 @@ export default function SnowDayAlertSystem() {
         />
       )}
 
-      {/* Security Modal */}
       {showSecurityModal && (
         <>
           <div 
@@ -932,35 +785,35 @@ export default function SnowDayAlertSystem() {
               </h3>
               
               <div style={{ marginBottom: '16px' }}>
-                <strong style={{ color: '#1e40af' }}>🔒 Encrypted Storage:</strong>
+                <strong style={{ color: '#0c4a6e' }}>🔒 Encrypted Storage:</strong>
                 <p style={{ marginTop: '4px', color: '#6b7280' }}>
                   Your email and phone number are stored securely using encrypted databases and strict access controls.
                 </p>
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <strong style={{ color: '#1e40af' }}>✉️ Email Verification:</strong>
+                <strong style={{ color: '#0c4a6e' }}>✉️ Email Verification:</strong>
                 <p style={{ marginTop: '4px', color: '#6b7280' }}>
                   We verify your email before sending alerts to prevent spam and unauthorized subscriptions.
                 </p>
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <strong style={{ color: '#1e40af' }}>🚫 No Data Sharing:</strong>
+                <strong style={{ color: '#0c4a6e' }}>🚫 No Data Sharing:</strong>
                 <p style={{ marginTop: '4px', color: '#6b7280' }}>
                   We never sell, rent, or share your personal information. Your data is used <strong>only</strong> to send snow day notifications.
                 </p>
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <strong style={{ color: '#1e40af' }}>🗑️ Easy Unsubscribe:</strong>
+                <strong style={{ color: '#0c4a6e' }}>🗑️ Easy Unsubscribe:</strong>
                 <p style={{ marginTop: '4px', color: '#6b7280' }}>
                   You can unsubscribe at any time through the link in your verification email or any alert email. Your data is immediately deleted when you unsubscribe.
                 </p>
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <strong style={{ color: '#1e40af' }}>🔐 Protected Links:</strong>
+                <strong style={{ color: '#0c4a6e' }}>🔐 Protected Links:</strong>
                 <p style={{ marginTop: '4px', color: '#6b7280' }}>
                   All verification and unsubscribe links use unique, randomly-generated tokens that expire to prevent unauthorized access.
                 </p>
@@ -985,7 +838,7 @@ export default function SnowDayAlertSystem() {
                 marginTop: '24px',
                 width: '100%',
                 padding: '12px',
-                background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
+                background: 'linear-gradient(135deg, #1e6b96 0%, #2b7fa8 100%)',
                 color: 'white',
                 border: 'none',
                 borderRadius: '12px',
@@ -1152,12 +1005,12 @@ export default function SnowDayAlertSystem() {
               </div>
             )}
 
-            <div className="mobile-info-box" style={{marginTop: '32px', padding: '20px', background: '#eff6ff', borderRadius: '12px', border: '2px solid #bfdbfe'}}>
-              <p className="mobile-info-text" style={{fontSize: '14px', color: '#1e40af', marginBottom: '8px'}}>
+            <div className="mobile-info-box" style={{marginTop: '32px', padding: '20px', background: '#e0f2fe', borderRadius: '12px', border: '2px solid #7dd3fc'}}>
+              <p className="mobile-info-text" style={{fontSize: '14px', color: '#0c4a6e', marginBottom: '8px'}}>
                 <CheckCircle size={16} style={{display: 'inline', marginRight: '6px'}} />
                 You'll receive a verification email after signing up.
               </p>
-              <p className="mobile-info-text" style={{fontSize: '14px', color: '#1e40af', marginBottom: '8px'}}>
+              <p className="mobile-info-text" style={{fontSize: '14px', color: '#0c4a6e', marginBottom: '8px'}}>
                 <CheckCircle size={16} style={{display: 'inline', marginRight: '6px'}} />
                 Only verified users receive alerts.
               </p>
@@ -1170,7 +1023,7 @@ export default function SnowDayAlertSystem() {
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: '#1e40af',
+                      color: '#0c4a6e',
                       textDecoration: 'underline',
                       cursor: 'pointer',
                       fontSize: '14px',
@@ -1183,22 +1036,22 @@ export default function SnowDayAlertSystem() {
                   </button>
                 </span>
               </p>
-              <p className="mobile-info-text" style={{ fontSize: '14px', color: '#6b21a8' }}>
+              <p className="mobile-info-text" style={{ fontSize: '14px', color: '#7c3aed' }}>
                 Issues? Feel Free to Email{' '}
                 <a
                   href="mailto:TaranshG.Dev@gmail.com?subject=Snow%20Day%20Notifier%20Issue"
-                  style={{ color: '#6b21a8', fontWeight: 700, textDecoration: 'underline', wordBreak: 'break-all' }}
+                  style={{ color: '#7c3aed', fontWeight: 700, textDecoration: 'underline', wordBreak: 'break-all' }}
                 >
                   TaranshG.Dev@gmail.com
                 </a>
               </p>
-              <p className="mobile-info-text" style={{ fontSize: '12px', color: '#1e40af' }}>
+              <p className="mobile-info-text" style={{ fontSize: '12px', color: '#0c4a6e' }}>
                 This is a student-run project and is independent of McMaster University :D
               </p>
               <div style={{
                 marginTop: '28px',
                 paddingTop: '16px',
-                borderTop: '1px solid #e5e7eb',
+                borderTop: '1px solid #cbd5e1',
                 textAlign: 'center',
                 fontSize: '13px',
                 color: '#6b7280'
@@ -1209,7 +1062,7 @@ export default function SnowDayAlertSystem() {
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
-                    color: '#2563eb',
+                    color: '#1e6b96',
                     fontWeight: '600',
                     textDecoration: 'none',
                     display: 'inline-flex',
@@ -1233,7 +1086,7 @@ export default function SnowDayAlertSystem() {
               </h2>
               <p className="mobile-success-text" style={{color: '#6b7280', marginBottom: '32px', lineHeight: '1.6'}}>
                 We've sent a verification email to<br />
-                <strong style={{color: '#3b82f6', fontSize: '18px', wordBreak: 'break-all'}}>{submittedEmail}</strong>
+                <strong style={{color: '#1e6b96', fontSize: '18px', wordBreak: 'break-all'}}>{submittedEmail}</strong>
                 <br /><br />
                 Click the link to activate your snow day alerts. If you don't see the email, please check your spam folder :D
               </p>
