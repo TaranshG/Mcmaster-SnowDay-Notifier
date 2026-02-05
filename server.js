@@ -27,10 +27,14 @@ const smtpTransporter = nodemailer.createTransport({
   },
 });
 
-smtpTransporter.verify().then(
-  () => console.log("✅ SMTP ready"),
-  (e) => console.log("❌ SMTP verify failed:", e.message)
-);
+if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+  smtpTransporter.verify().then(
+    () => console.log("✅ SMTP ready"),
+    (e) => console.log("❌ SMTP verify failed:", e.message)
+  );
+} else {
+  console.log("⚠️ SMTP env vars missing — skipping SMTP verify()");
+}
 
 
 const app = express();
