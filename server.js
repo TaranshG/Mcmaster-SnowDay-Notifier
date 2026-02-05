@@ -152,16 +152,32 @@ app.post('/api/signup', async (req, res) => {
 
     // Send with Brevo
     const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-    
-    sendSmtpEmail.sender = { 
-      name: "McMaster Snow Day Alerts", 
+
+    sendSmtpEmail.sender = {
+      name: "McMaster Snow Day Alerts",
       email: process.env.BREVO_SENDER_EMAIL
     };
     sendSmtpEmail.to = [{ email: email }];
     sendSmtpEmail.subject = "Confirm your email for snow day alerts";
     sendSmtpEmail.htmlContent = html;
 
-    await apiInstance.sendTransacEmail(sendSmtpEmail);
+    console.log("Brevo config:", {
+      hasApiKey: !!process.env.BREVO_API_KEY,
+      apiKeyPrefix: process.env.BREVO_API_KEY?.substring(0, 10),
+      senderEmail: process.env.BREVO_SENDER_EMAIL
+    });
+
+    try {
+      await apiInstance.sendTransacEmail(sendSmtpEmail);
+      console.log("✅ Email sent successfully");
+    } catch (emailError) {
+      console.error("❌ Brevo error details:", {
+        message: emailError.message,
+        response: emailError.response?.data,
+        status: emailError.response?.status
+      });
+      throw emailError;
+    }
 
     return res.status(200).json({ success: true });
   } catch (err) {
