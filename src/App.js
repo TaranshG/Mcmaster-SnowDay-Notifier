@@ -722,6 +722,15 @@ export default function SnowDayAlertSystem() {
                   style={styles.input}
                   required
                 />
+                <p style={{
+                fontSize: '11px',
+                color: '#6b7280',
+                marginBottom: '24px',
+                marginLeft: '5px',
+                fontStyle: 'italic'
+                }}>
+                  We’ll only email you if McMaster officially declares a snow day.
+                </p>
               </div>
 
               <div style={styles.formGroup}>
@@ -735,6 +744,15 @@ export default function SnowDayAlertSystem() {
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                   style={styles.input}
                 />
+                <p style={{
+                fontSize: '11px',
+                color: '#6b7280',
+                marginBottom: '24px',
+                marginLeft: '5px',
+                fontStyle: 'italic'
+                }}>
+                  You’ll only receive a text on an actual snow day.
+                </p>
               </div>
 
               <div style={{marginBottom: '8px'}}>
@@ -759,6 +777,11 @@ export default function SnowDayAlertSystem() {
                 fontStyle: 'italic'
               }}>
                 No spam. Only McMaster closure alerts. Unsubscribe anytime.
+              </p>
+
+              
+              <p className="mt-3 text-sm text-gray-600">
+                🔒 Your email is private. We never share your data.
               </p>
 
               <button
