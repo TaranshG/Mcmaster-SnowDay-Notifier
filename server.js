@@ -1,18 +1,16 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const nodemailer = require('nodemailer');
+
+// Brevo setup
+const SibApiV3Sdk = require('@getbrevo/brevo');
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+apiInstance.setApiKey(
+  SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
+  process.env.BREVO_API_KEY
+);
 
 const { createClient } = require('@supabase/supabase-js');
-
-// Gmail transporter
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD
-  }
-});
 
 const app = express();
 
@@ -41,6 +39,7 @@ function makeToken() {
   );
 }
 
+// Signup endpoint
 app.post('/api/signup', async (req, res) => {
   const { email, phone } = req.body;
 
@@ -151,13 +150,18 @@ app.post('/api/signup', async (req, res) => {
 </html>
 `;
 
-    // Send with Gmail
-    await transporter.sendMail({
-      from: `"McMaster Snow Day Alerts" <${process.env.GMAIL_USER}>`,
-      to: email,
-      subject: 'Confirm your email for snow day alerts',
-      html
-    });
+    // Send with Brevo
+    const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+    
+    sendSmtpEmail.sender = { 
+      name: "McMaster Snow Day Alerts", 
+      email: process.env.BREVO_SENDER_EMAIL
+    };
+    sendSmtpEmail.to = [{ email: email }];
+    sendSmtpEmail.subject = "Confirm your email for snow day alerts";
+    sendSmtpEmail.htmlContent = html;
+
+    await apiInstance.sendTransacEmail(sendSmtpEmail);
 
     return res.status(200).json({ success: true });
   } catch (err) {
@@ -166,24 +170,29 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-// Keep rest of your endpoints the same...
+// Keep your verify endpoint exactly as is
 app.get('/api/verify', async (req, res) => {
   const token = req.query.token;
+
   if (!token) {
     return res.status(400).json({ success: false, error: 'Token required' });
   }
+
   try {
     const { data: row, error: findErr } = await supabase
       .from('subscribers')
       .select('email, verified')
       .eq('verification_token', token)
       .maybeSingle();
+
     if (findErr) {
       return res.status(500).json({ success: false, error: findErr.message });
     }
+
     if (!row) {
       return res.status(400).json({ success: false, error: 'Invalid or expired token' });
     }
+
     if (row.verified) {
       return res.status(200).json({
         success: true,
@@ -191,13 +200,16 @@ app.get('/api/verify', async (req, res) => {
         message: 'Already verified',
       });
     }
+
     const { error: updErr } = await supabase
       .from('subscribers')
       .update({ verified: true })
       .eq('verification_token', token);
+
     if (updErr) {
       return res.status(500).json({ success: false, error: updErr.message });
     }
+
     return res.status(200).json({ success: true, email: row.email });
   } catch (e) {
     console.error("Verify error:", e);
@@ -211,7 +223,9 @@ app.get('/api/admin/users', async (req, res) => {
       .from('subscribers')
       .select('id, email, phone, verified, created_at')
       .order('created_at', { ascending: false });
+
     if (error) return res.status(500).json({ error: error.message });
+
     return res.status(200).json(data);
   } catch (error) {
     console.error('Admin users error:', error);
