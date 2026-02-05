@@ -55,52 +55,51 @@ export default function SnowDayAlertSystem() {
   );
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
+  e.preventDefault();
+  setError('');
+  
+  if (!formData.consent) {
+    setError('Please check the consent box to receive alerts.');
+    const consentCheckbox = document.getElementById('consent-checkbox');
+    if (consentCheckbox) {
+      consentCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return;
+  }
+
+  if (!formData.email) {
+    setError('Please enter your email.');
+    return;
+  }
+
+  setIsSubmitting(true);
+  
+  try {
+    const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+
+    const response = await fetch(`${API_BASE}/api/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: formData.email, phone: formData.phone })
+    });
+
+    const data = await response.json();
     
-    if (!formData.consent) {
-      setError('Please check the consent box to receive alerts.');
-      const consentCheckbox = document.getElementById('consent-checkbox');
-      if (consentCheckbox) {
-        consentCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-      return;
+    if (response.ok) {
+      setSubmittedEmail(formData.email);
+      setView('success');
+      setFormData({ email: '', phone: '', consent: false });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setError(data.error || 'Something went wrong');
     }
-
-    if (!formData.email) {
-      setError('Please enter your email.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    
-    if (formData.email && formData.consent) {
-      try {
-        const API_BASE = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
-
-        const response = await fetch(`${API_BASE}/api/signup`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: formData.email, phone: formData.phone })
-        });
-
-        const data = await response.json();
-        
-        if (response.ok) {
-          setSubmittedEmail(formData.email);
-          setView('success');
-          setFormData({ email: '', phone: '', consent: false });
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-          setError(data.error || 'Something went wrong');
-        }
-      } catch (error) {
-        console.error('Signup error:', error);
-        setError('Failed to sign up. Please try again.');
-      }
-    }
-    setIsSubmitting(false);
-  };
+  } catch (error) {
+    console.error('Signup error:', error);
+    setError('Failed to sign up. Please try again.');
+  } finally {
+    setIsSubmitting(false); // ← MOVED INSIDE - now it runs after fetch completes OR errors
+  }
+};
 
   const toggleMusic = () => {
     if (audioRef.current) {
