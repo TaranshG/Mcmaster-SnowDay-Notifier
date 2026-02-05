@@ -15,6 +15,24 @@ console.log("ENV CHECK:", {
   SENDGRID_FROM_EMAIL: process.env.SENDGRID_FROM_EMAIL,
 });
 
+const nodemailer = require("nodemailer");
+
+const smtpTransporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT || 587),
+  secure: false, // IMPORTANT for port 587
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+smtpTransporter.verify().then(
+  () => console.log("✅ SMTP ready"),
+  (e) => console.log("❌ SMTP verify failed:", e.message)
+);
+
+
 const app = express();
 
 app.use(cors({
@@ -167,17 +185,18 @@ app.post('/api/signup', async (req, res) => {
 </html>
 `;
 
-    const fromEmail = process.env.SENDGRID_FROM_EMAIL;
+    const fromEmail = process.env.SMTP_FROM;
     if (!fromEmail) {
-      return res.status(500).json({ error: "SENDGRID_FROM_EMAIL is missing in env" });
+      return res.status(500).json({ error: "SMTP_FROM is missing in env" });
     }
 
-    await sgMail.send({
-      to: email,
+    await smtpTransporter.sendMail({
       from: fromEmail,
+      to: email,
       subject: "Confirm your email for snow day alerts",
       html,
     });
+
 
     return res.status(200).json({ success: true });
   } catch (err) {
