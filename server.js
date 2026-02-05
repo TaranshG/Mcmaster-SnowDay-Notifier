@@ -2,18 +2,15 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Brevo setup
+const SibApiV3Sdk = require('@getbrevo/brevo');
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+apiInstance.setApiKey(
+  SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
+  process.env.BREVO_API_KEY
+);
 
 const { createClient } = require('@supabase/supabase-js');
-
-console.log("ENV CHECK:", {
-  SUPABASE_URL: process.env.SUPABASE_URL,
-  HAS_SUPABASE_KEY: !!process.env.SUPABASE_ANON_KEY,
-  APP_URL: process.env.APP_URL,
-  HAS_SENDGRID_KEY: !!process.env.SENDGRID_API_KEY,
-  SENDGRID_FROM_EMAIL: process.env.SENDGRID_FROM_EMAIL,
-});
 
 const app = express();
 
@@ -21,7 +18,7 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     process.env.APP_URL,
-    process.env.FRONTEND_URL, // optional extra
+    process.env.FRONTEND_URL,
   ].filter(Boolean),
   methods: ['GET', 'POST'],
 }));
@@ -35,10 +32,7 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY
 );
 
-console.log("SUPABASE URL:", process.env.SUPABASE_URL);
-
 function makeToken() {
-  // better than Math.random() only, but still simple
   return (
     Math.random().toString(36).slice(2) +
     Math.random().toString(36).slice(2)
@@ -65,7 +59,6 @@ app.post('/api/signup', async (req, res) => {
       .select()
       .maybeSingle();
 
-    // Handle duplicate email
     if (error) {
       if (error.code === '23505') {
         const { data: existing, error: lookupErr } = await supabase
@@ -97,36 +90,20 @@ app.post('/api/signup', async (req, res) => {
     const appUrl = process.env.APP_URL || 'http://localhost:3000';
     const verifyUrl = `${appUrl}/verify?token=${encodeURIComponent(token)}`;
 
-    // Pretty email HTML
     const html = `
 <!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Confirm your email</title>
   </head>
-
-  <body style="margin:0;padding:0;background:#f6f7fb;">
+  <body style="margin:0;padding:0;background:#f6f7fb;font-family:Arial,sans-serif;">
     <div style="width:100%;padding:24px 12px;">
-      <div
-        style="
-          max-width:560px;
-          margin:0 auto;
-          background:#ffffff;
-          border-radius:12px;
-          border:1px solid #e5e7eb;
-          font-family: Arial, Helvetica, sans-serif;
-          color:#111827;
-        "
-      >
+      <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;border:1px solid #e5e7eb;color:#111827;">
+        
         <div style="padding:20px 20px 0;">
-          <div style="font-size:16px;font-weight:700;">
-            McMaster Snow Day Alerts
-          </div>
-          <div style="margin-top:6px;font-size:13px;color:#6b7280;">
-            Confirm your email to receive alerts
-          </div>
+          <div style="font-size:18px;font-weight:700;">McMaster Snow Day Alerts</div>
+          <div style="margin-top:6px;font-size:14px;color:#6b7280;">Confirm your email</div>
         </div>
 
         <div style="padding:16px 20px 20px;">
@@ -135,29 +112,35 @@ app.post('/api/signup', async (req, res) => {
           </p>
 
           <p style="margin:10px 0 0;font-size:14px;line-height:1.6;color:#374151;">
-            Please confirm your email address to receive snow day alerts for McMaster.
+            Click the button below to confirm your email and start receiving snow day alerts for McMaster University.
           </p>
 
-          <p style="margin:14px 0 0;font-size:14px;line-height:1.6;color:#374151;">
-            Confirm here:
-            <br />
-            <a href="${verifyUrl}" style="color:#2563eb;word-break:break-all;">
+          <div style="margin:24px 0;text-align:center;">
+            <a href="${verifyUrl}" 
+               style="display:inline-block;padding:12px 32px;background:#2563eb;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;font-size:14px;">
+              Confirm Email
+            </a>
+          </div>
+
+          <p style="margin:14px 0 0;font-size:13px;line-height:1.6;color:#6b7280;">
+            Or copy this link:<br/>
+            <a href="${verifyUrl}" style="color:#2563eb;word-break:break-all;font-size:12px;">
               ${verifyUrl}
             </a>
           </p>
 
-          <p style="margin:14px 0 0;font-size:13px;line-height:1.6;color:#6b7280;">
-            You will only receive an email if McMaster officially announces a snow day.
-            No ads, no data sharing. Unsubscribe anytime.
+          <p style="margin:16px 0 0;font-size:13px;line-height:1.6;color:#6b7280;">
+            You'll only get an email when McMaster officially announces a snow day. No spam, no ads.
           </p>
 
-          <p style="margin:14px 0 0;font-size:12px;line-height:1.6;color:#6b7280;">
-            If you didn’t sign up for this, you can ignore this email.
+          <p style="margin:14px 0 0;font-size:12px;line-height:1.6;color:#9ca3af;">
+            Didn't sign up? You can safely ignore this email.
           </p>
 
-          <div style="margin-top:16px;padding-top:14px;border-top:1px solid #e5e7eb;">
-            <p style="margin:0;font-size:12px;color:#6b7280;">
-              Student-built tool for McMaster students.
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e7eb;">
+            <p style="margin:0;font-size:11px;color:#9ca3af;">
+              McMaster Snow Day Alerts<br/>
+              Hamilton, ON, Canada
             </p>
           </div>
         </div>
@@ -167,17 +150,18 @@ app.post('/api/signup', async (req, res) => {
 </html>
 `;
 
-    const fromEmail = process.env.SENDGRID_FROM_EMAIL;
-    if (!fromEmail) {
-      return res.status(500).json({ error: "SENDGRID_FROM_EMAIL is missing in env" });
-    }
+    // Send with Brevo
+    const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+    
+    sendSmtpEmail.sender = { 
+      name: "McMaster Snow Day Alerts", 
+      email: process.env.BREVO_SENDER_EMAIL
+    };
+    sendSmtpEmail.to = [{ email: email }];
+    sendSmtpEmail.subject = "Confirm your email for snow day alerts";
+    sendSmtpEmail.htmlContent = html;
 
-    await sgMail.send({
-      to: email,
-      from: fromEmail,
-      subject: "Confirm your email for snow day alerts",
-      html,
-    });
+    await apiInstance.sendTransacEmail(sendSmtpEmail);
 
     return res.status(200).json({ success: true });
   } catch (err) {
@@ -186,7 +170,7 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-// Verify endpoint
+// Keep your verify endpoint exactly as is
 app.get('/api/verify', async (req, res) => {
   const token = req.query.token;
 
@@ -195,7 +179,6 @@ app.get('/api/verify', async (req, res) => {
   }
 
   try {
-    // 1) Find row by token
     const { data: row, error: findErr } = await supabase
       .from('subscribers')
       .select('email, verified')
@@ -210,7 +193,6 @@ app.get('/api/verify', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Invalid or expired token' });
     }
 
-    // 2) Already verified => return success (no confusion)
     if (row.verified) {
       return res.status(200).json({
         success: true,
@@ -219,7 +201,6 @@ app.get('/api/verify', async (req, res) => {
       });
     }
 
-    // 3) Mark verified (keeping token is fine)
     const { error: updErr } = await supabase
       .from('subscribers')
       .update({ verified: true })
@@ -236,7 +217,6 @@ app.get('/api/verify', async (req, res) => {
   }
 });
 
-// Admin users endpoint (optional - keep if you use it)
 app.get('/api/admin/users', async (req, res) => {
   try {
     const { data, error } = await supabase
