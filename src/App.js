@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bell, CheckCircle, Snowflake, Volume2, VolumeX, Share2, X, Copy, Check, Linkedin, Shield } from 'lucide-react';
+import { Bell, CheckCircle, Snowflake, Volume2, VolumeX, Share2, X, Copy, Check, Linkedin, Shield, Mail, Phone, ChevronDown } from 'lucide-react';
 
 export default function SnowDayAlertSystem() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,7 +15,9 @@ export default function SnowDayAlertSystem() {
   const [sharePanel, setSharePanel] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showSecurityModal, setShowSecurityModal] = useState(false);
+  const [showScrollHint, setShowScrollHint] = useState(true);
   const audioRef = useRef(null);
+  const formRef = useRef(null);
 
   // Snow toggle with system preference detection
   const [snowEnabled, setSnowEnabled] = useState(() => {
@@ -31,6 +33,17 @@ export default function SnowDayAlertSystem() {
     localStorage.setItem('snowEnabled', snowEnabled);
   }, [snowEnabled]);
 
+  // Hide scroll hint after user scrolls
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setShowScrollHint(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const [snowflakes] = useState(() => 
     [...Array(25)].map((_, i) => ({
       id: i,
@@ -44,13 +57,17 @@ export default function SnowDayAlertSystem() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    // ✅ block submit if consent not checked
+    
     if (!formData.consent) {
       setError('Please check the consent box to receive alerts.');
+      // Scroll to consent checkbox
+      const consentCheckbox = document.getElementById('consent-checkbox');
+      if (consentCheckbox) {
+        consentCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       return;
     }
 
-    // ✅ block submit if email missing (just in case)
     if (!formData.email) {
       setError('Please enter your email.');
       return;
@@ -68,13 +85,14 @@ export default function SnowDayAlertSystem() {
           body: JSON.stringify({ email: formData.email, phone: formData.phone })
         });
 
-        
         const data = await response.json();
         
         if (response.ok) {
-          setSubmittedEmail(formData.email); // Store email before resetting
+          setSubmittedEmail(formData.email);
           setView('success');
           setFormData({ email: '', phone: '', consent: false });
+          // Scroll to top smoothly
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
           setError(data.error || 'Something went wrong');
         }
@@ -107,6 +125,12 @@ export default function SnowDayAlertSystem() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
+  };
+
+  const scrollToForm = () => {
+    if (formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   const styles = {
@@ -277,7 +301,9 @@ export default function SnowDayAlertSystem() {
       marginBottom: '24px'
     },
     label: {
-      display: 'block',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
       fontSize: '14px',
       fontWeight: '700',
       color: '#1f2937',
@@ -309,7 +335,8 @@ export default function SnowDayAlertSystem() {
       alignItems: 'center',
       justifyContent: 'center',
       gap: '8px',
-      transition: 'all 0.3s'
+      transition: 'all 0.3s',
+      position: 'relative'
     },
     copyButton: {
       width: '100%',
@@ -327,6 +354,21 @@ export default function SnowDayAlertSystem() {
       justifyContent: 'center',
       gap: '8px',
       transition: 'all 0.3s'
+    },
+    scrollHint: {
+      position: 'fixed',
+      bottom: '32px',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      zIndex: 30,
+      opacity: showScrollHint ? 1 : 0,
+      transition: 'opacity 0.5s',
+      pointerEvents: showScrollHint ? 'auto' : 'none',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '8px',
+      cursor: 'pointer'
     }
   };
 
@@ -354,6 +396,18 @@ export default function SnowDayAlertSystem() {
           90% { opacity: 1; }
           100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+        @keyframes shimmer {
+          0% { background-position: -1000px 0; }
+          100% { background-position: 1000px 0; }
+        }
         .snowflake {
           position: fixed;
           top: -10px;
@@ -364,6 +418,54 @@ export default function SnowDayAlertSystem() {
         * {
           box-sizing: border-box;
         }
+        
+        /* Smooth scrolling */
+        html {
+          scroll-behavior: smooth;
+        }
+        
+        /* Focus states for accessibility */
+        input:focus, button:focus, a:focus {
+          outline: 3px solid #60a5fa;
+          outline-offset: 2px;
+        }
+        
+        /* Input focus enhancement */
+        input:focus {
+          border-color: #3b82f6 !important;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* Button hover states */
+        button:not(:disabled):hover {
+          transform: translateY(-2px);
+          box-shadow: 0 25px 50px rgba(59, 130, 246, 0.5);
+        }
+        
+        button:not(:disabled):active {
+          transform: translateY(0);
+        }
+        
+        /* Loading spinner */
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        
+        .spinner {
+          border: 3px solid rgba(255, 255, 255, 0.3);
+          border-radius: 50%;
+          border-top-color: white;
+          width: 20px;
+          height: 20px;
+          animation: spin 0.6s linear infinite;
+        }
+        
+        /* Checkbox custom styling */
+        input[type="checkbox"] {
+          accent-color: #3b82f6;
+        }
+        
+        /* Desktop styles */
         @media (min-width: 1024px) {
           .share-tab-desktop {
             display: block !important;
@@ -372,12 +474,183 @@ export default function SnowDayAlertSystem() {
             display: none !important;
           }
         }
+        
+        /* Mobile styles */
         @media (max-width: 1023px) {
           .share-button-mobile {
             display: flex !important;
           }
+          .scroll-hint-mobile {
+            display: none !important;
+          }
         }
-      
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+          .mobile-header-content {
+            padding: 16px 16px !important;
+          }
+          
+          .mobile-logo-icon {
+            padding: 10px !important;
+          }
+          
+          .mobile-logo-icon svg {
+            width: 24px !important;
+            height: 24px !important;
+          }
+          
+          .mobile-title {
+            font-size: 20px !important;
+          }
+          
+          .mobile-subtitle {
+            font-size: 12px !important;
+          }
+          
+          .mobile-main {
+            padding: 24px 16px !important;
+            padding-bottom: 100px !important;
+          }
+          
+          .mobile-card {
+            padding: 24px !important;
+            border-radius: 20px !important;
+          }
+          
+          .mobile-card-title {
+            font-size: 24px !important;
+          }
+          
+          .mobile-card-subtitle {
+            font-size: 14px !important;
+            margin-bottom: 24px !important;
+          }
+          
+          .mobile-form-group {
+            margin-bottom: 20px !important;
+          }
+          
+          .mobile-label {
+            font-size: 12px !important;
+            margin-bottom: 6px !important;
+          }
+          
+          .mobile-input {
+            padding: 12px 14px !important;
+            font-size: 16px !important;
+          }
+          
+          .mobile-helper-text {
+            font-size: 11px !important;
+            margin-top: 6px !important;
+          }
+          
+          .mobile-submit-button {
+            padding: 16px !important;
+            font-size: 16px !important;
+          }
+          
+          .mobile-info-box {
+            padding: 16px !important;
+            margin-top: 24px !important;
+          }
+          
+          .mobile-info-text {
+            font-size: 13px !important;
+          }
+          
+          .mobile-control-buttons {
+            top: 12px !important;
+            right: 12px !important;
+            gap: 6px !important;
+          }
+          
+          .mobile-control-button {
+            padding: 10px !important;
+          }
+          
+          .mobile-control-button svg {
+            width: 20px !important;
+            height: 20px !important;
+          }
+          
+          .mobile-share-panel {
+            padding: 24px !important;
+          }
+          
+          .mobile-share-title {
+            font-size: 24px !important;
+            margin-bottom: 24px !important;
+          }
+          
+          .mobile-qr-container {
+            width: 200px !important;
+            height: 200px !important;
+            padding: 16px !important;
+            margin-bottom: 24px !important;
+          }
+          
+          .mobile-qr-img {
+            width: 168px !important;
+            height: 168px !important;
+          }
+          
+          .mobile-url-text {
+            font-size: 16px !important;
+            padding: 12px 16px !important;
+          }
+          
+          .mobile-success-icon {
+            width: 60px !important;
+            height: 60px !important;
+            margin-bottom: 20px !important;
+          }
+          
+          .mobile-success-title {
+            font-size: 28px !important;
+            margin-bottom: 12px !important;
+          }
+          
+          .mobile-success-text {
+            font-size: 14px !important;
+            margin-bottom: 24px !important;
+          }
+          
+          .mobile-security-modal {
+            padding: 24px !important;
+            max-width: 95% !important;
+          }
+          
+          .mobile-security-title {
+            font-size: 20px !important;
+          }
+          
+          .mobile-security-content {
+            font-size: 14px !important;
+          }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 400px) {
+          .mobile-card-title {
+            font-size: 22px !important;
+          }
+          
+          .mobile-title {
+            font-size: 18px !important;
+          }
+          
+          .mobile-qr-container {
+            width: 180px !important;
+            height: 180px !important;
+          }
+          
+          .mobile-qr-img {
+            width: 148px !important;
+            height: 148px !important;
+          }
+        }
       `}</style>
 
       <div style={styles.blob1}></div>
@@ -399,11 +672,13 @@ export default function SnowDayAlertSystem() {
         />
       ))}
 
-      <div style={styles.controlButtons}>
+      <div style={styles.controlButtons} className="mobile-control-buttons">
         <button 
           onClick={toggleSnow} 
           style={styles.controlButton}
+          className="mobile-control-button"
           title={snowEnabled ? "Disable snow" : "Enable snow"}
+          aria-label={snowEnabled ? "Disable snow animation" : "Enable snow animation"}
         >
           {snowEnabled ? (
             <Snowflake color="white" size={24} />
@@ -414,11 +689,39 @@ export default function SnowDayAlertSystem() {
         <button 
           onClick={toggleMusic} 
           style={styles.controlButton}
+          className="mobile-control-button"
           title={isMusicPlaying ? "Mute music" : "Play music"}
+          aria-label={isMusicPlaying ? "Mute background music" : "Play background music"}
         >
           {isMusicPlaying ? <Volume2 color="white" size={24} /> : <VolumeX color="white" size={24} />}
         </button>
       </div>
+
+      {/* Scroll hint - desktop only */}
+      {view === 'signup' && (
+        <div 
+          style={styles.scrollHint} 
+          onClick={scrollToForm}
+          className="scroll-hint-mobile"
+        >
+          <p style={{
+            color: 'white',
+            fontSize: '14px',
+            fontWeight: '600',
+            textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+          }}>
+            Scroll to sign up
+          </p>
+          <ChevronDown 
+            color="white" 
+            size={28} 
+            style={{
+              animation: 'bounce 2s infinite',
+              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+            }}
+          />
+        </div>
+      )}
 
       <audio ref={audioRef} loop>
         <source src="/Only.mp3" type="audio/mpeg" />
@@ -430,6 +733,7 @@ export default function SnowDayAlertSystem() {
         onClick={() => setSharePanel(true)}
         onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-50%) translateX(-5px)'}
         onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(-50%) translateX(0)'}
+        aria-label="Open share panel"
       >
         <Share2 color="white" size={24} />
       </div>
@@ -438,11 +742,12 @@ export default function SnowDayAlertSystem() {
         className="share-button-mobile"
         style={styles.shareButtonMobile}
         onClick={() => setSharePanel(true)}
+        aria-label="Share this page"
       >
         <Share2 color="white" size={28} />
       </div>
 
-      <div style={styles.sharePanel}>
+      <div style={styles.sharePanel} className="mobile-share-panel">
         <button
           onClick={() => setSharePanel(false)}
           style={{
@@ -454,13 +759,14 @@ export default function SnowDayAlertSystem() {
             cursor: 'pointer',
             padding: '8px'
           }}
+          aria-label="Close share panel"
         >
           <X size={24} color="#6b7280" />
         </button>
 
         <Snowflake size={48} color="#3b82f6" style={{marginBottom: '24px'}} />
         
-        <h2 style={{
+        <h2 className="mobile-share-title" style={{
           fontSize: '28px',
           fontWeight: 'bold',
           color: '#111827',
@@ -470,7 +776,7 @@ export default function SnowDayAlertSystem() {
           Scan to Sign Up
         </h2>
 
-        <div style={{
+        <div className="mobile-qr-container" style={{
           width: '240px',
           height: '240px',
           background: 'white',
@@ -483,8 +789,9 @@ export default function SnowDayAlertSystem() {
           justifyContent: 'center'
         }}>
           <img 
+            className="mobile-qr-img"
             src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.href)}`}
-            alt="QR Code"
+            alt="QR Code for Snow Day Alert System"
             style={{width: '200px', height: '200px'}}
           />
         </div>
@@ -504,11 +811,12 @@ export default function SnowDayAlertSystem() {
           borderRadius: '12px',
           border: '2px solid #3b82f6'
         }}>
-          <p style={{
+          <p className="mobile-url-text" style={{
             fontSize: '20px',
             fontWeight: 'bold',
             color: '#1e40af',
-            fontFamily: 'monospace'
+            fontFamily: 'monospace',
+            wordBreak: 'break-all'
           }}>
             tinyurl.com/McmasterSnowDays
           </p>
@@ -519,6 +827,7 @@ export default function SnowDayAlertSystem() {
           style={styles.copyButton}
           onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.02)'}
           onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          aria-label="Copy link to clipboard"
         >
           {copied ? (
             <>
@@ -556,6 +865,7 @@ export default function SnowDayAlertSystem() {
             background: 'rgba(0,0,0,0.5)',
             zIndex: 99
           }}
+          aria-label="Close share panel"
         />
       )}
 
@@ -573,8 +883,9 @@ export default function SnowDayAlertSystem() {
               background: 'rgba(0,0,0,0.5)',
               zIndex: 99
             }}
+            aria-label="Close security modal"
           />
-          <div style={{
+          <div className="mobile-security-modal" style={{
             position: 'fixed',
             top: '50%',
             left: '50%',
@@ -588,7 +899,10 @@ export default function SnowDayAlertSystem() {
             boxShadow: '0 25px 50px rgba(0,0,0,0.3)',
             maxHeight: '80vh',
             overflowY: 'auto'
-          }}>
+          }}
+          role="dialog"
+          aria-labelledby="security-modal-title"
+          >
             <button
               onClick={() => setShowSecurityModal(false)}
               style={{
@@ -600,18 +914,19 @@ export default function SnowDayAlertSystem() {
                 cursor: 'pointer',
                 padding: '8px'
               }}
+              aria-label="Close security information"
             >
               <X size={24} color="#374151" />
             </button>
 
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
               <Shield size={48} color="#10b981" style={{ margin: '0 auto 16px' }} />
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827', marginBottom: '8px' }}>
+              <h2 id="security-modal-title" className="mobile-security-title" style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827', marginBottom: '8px' }}>
                 Your Data is Secure
               </h2>
             </div>
 
-            <div style={{ color: '#374151', lineHeight: '1.7', fontSize: '15px' }}>
+            <div className="mobile-security-content" style={{ color: '#374151', lineHeight: '1.7', fontSize: '15px' }}>
               <h3 style={{ fontWeight: '600', marginBottom: '12px', color: '#111827' }}>
                 How we protect your information:
               </h3>
@@ -686,84 +1001,93 @@ export default function SnowDayAlertSystem() {
       )}
 
       <header style={styles.header}>
-        <div style={styles.headerContent}>
+        <div style={styles.headerContent} className="mobile-header-content">
           <div style={styles.logoContainer}>
-            <div style={styles.logoIcon}>
+            <div style={styles.logoIcon} className="mobile-logo-icon">
               <Bell color="white" size={32} />
             </div>
             <div>
-              <h1 style={styles.title}>McMaster Snow Day</h1>
-              <p style={styles.subtitle}>Never miss a snow day alert</p>
+              <h1 style={styles.title} className="mobile-title">McMaster Snow Day</h1>
+              <p style={styles.subtitle} className="mobile-subtitle">Never miss a snow day alert</p>
             </div>
           </div>
         </div>
       </header>
 
-      <main style={styles.main}>
+      <main style={styles.main} className="mobile-main">
         {view === 'signup' && (
-          <div style={styles.card}>
-            <h2 style={{fontSize: '32px', fontWeight: 'bold', color: '#111827', marginBottom: '8px', textAlign: 'center'}}>
+          <div style={styles.card} className="mobile-card" ref={formRef}>
+            <h2 className="mobile-card-title" style={{fontSize: '32px', fontWeight: 'bold', color: '#111827', marginBottom: '8px', textAlign: 'center'}}>
               Get Instant Snow Day Alerts ❄️
             </h2>
-            <p style={{color: '#6b7280', marginBottom: '32px', textAlign: 'center', lineHeight: '1.6'}}>
+            <p className="mobile-card-subtitle" style={{color: '#6b7280', marginBottom: '32px', textAlign: 'center', lineHeight: '1.6'}}>
               Sign up to receive instant notifications when McMaster announces a snow day
             </p>
 
             <form onSubmit={handleSubmit}>
-              <div style={styles.formGroup}>
-                <label style={styles.label}>
+              <div style={styles.formGroup} className="mobile-form-group">
+                <label style={styles.label} className="mobile-label" htmlFor="email-input">
+                  <Mail size={14} />
                   Email Address
                 </label>
                 <input
+                  id="email-input"
                   type="email"
                   placeholder="your.email@mcmaster.ca"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   style={styles.input}
+                  className="mobile-input"
                   required
+                  aria-required="true"
                 />
-                <p style={{
+                <p className="mobile-helper-text" style={{
                 fontSize: '11px',
                 color: '#6b7280',
-                marginBottom: '24px',
+                marginTop: '8px',
                 marginLeft: '5px',
                 fontStyle: 'italic'
                 }}>
-                  We’ll only email you if McMaster officially declares a snow day.
+                  We'll only email you if McMaster officially declares a snow day.
                 </p>
               </div>
 
-              <div style={styles.formGroup}>
-                <label style={styles.label}>
+              <div style={styles.formGroup} className="mobile-form-group">
+                <label style={styles.label} className="mobile-label" htmlFor="phone-input">
+                  <Phone size={14} />
                   Phone Number (Optional for SMS)
                 </label>
                 <input
+                  id="phone-input"
                   type="tel"
                   placeholder="+1 (416) 123-4567"
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                   style={styles.input}
+                  className="mobile-input"
                 />
-                <p style={{
+                <p className="mobile-helper-text" style={{
                 fontSize: '11px',
                 color: '#6b7280',
-                marginBottom: '24px',
+                marginTop: '8px',
                 marginLeft: '5px',
                 fontStyle: 'italic'
                 }}>
-                  You’ll only receive a text on an actual snow day.
+                  You'll only receive a text on an actual snow day.
                 </p>
               </div>
 
               <div style={{marginBottom: '8px'}}>
-                <label style={{display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer'}}>
+                <label style={{display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer'}} htmlFor="consent-checkbox">
                   <input
+                    id="consent-checkbox"
                     type="checkbox"
                     checked={formData.consent}
                     onChange={(e) => setFormData({...formData, consent: e.target.checked})}
-                    style={{width: '20px', height: '20px', cursor: 'pointer', flexShrink: 0}}
+                    style={{width: '20px', height: '20px', cursor: 'pointer', flexShrink: 0, marginTop: '2px'}}
+                    aria-required="true"
                   />
-                  <span style={{fontSize: '14px', color: '#374151'}}>
+                  <span style={{fontSize: '14px', color: '#374151', lineHeight: '1.5'}}>
                     I agree to receive snow day alerts via email{formData.phone ? ' and SMS' : ' (and SMS if I add my number)'}
                   </span>
                 </label>
@@ -780,7 +1104,7 @@ export default function SnowDayAlertSystem() {
               </p>
 
               
-              <p className="mt-3 text-sm text-gray-600">
+              <p style={{marginTop: '12px', marginBottom: '16px', fontSize: '14px', color: '#6b7280'}}>
                 🔒 Your email is private. We never share your data.
               </p>
 
@@ -791,39 +1115,54 @@ export default function SnowDayAlertSystem() {
                   opacity: (isSubmitting || !formData.consent) ? 0.7 : 1,
                   cursor: (isSubmitting || !formData.consent) ? 'not-allowed' : 'pointer'
                 }}
+                className="mobile-submit-button"
                 disabled={isSubmitting || !formData.consent}
+                aria-label={isSubmitting ? 'Submitting signup form' : 'Submit signup form'}
               >
-                <Bell size={20} />
-                {isSubmitting ? 'Signing up...' : 'Get Alerts'}
+                {isSubmitting ? (
+                  <>
+                    <div className="spinner"></div>
+                    Signing up...
+                  </>
+                ) : (
+                  <>
+                    <Bell size={20} />
+                    Get Alerts
+                  </>
+                )}
               </button>
 
             </form>
             
             {error && (
-              <div style={{
-                marginTop: '16px',
-                padding: '12px',
-                background: '#fee2e2',
-                border: '2px solid #fca5a5',
-                borderRadius: '8px',
-                color: '#991b1b',
-                fontSize: '14px'
-              }}>
+              <div 
+                style={{
+                  marginTop: '16px',
+                  padding: '12px',
+                  background: '#fee2e2',
+                  border: '2px solid #fca5a5',
+                  borderRadius: '8px',
+                  color: '#991b1b',
+                  fontSize: '14px'
+                }}
+                role="alert"
+                aria-live="polite"
+              >
                 {error}
               </div>
             )}
 
-            <div style={{marginTop: '32px', padding: '20px', background: '#eff6ff', borderRadius: '12px', border: '2px solid #bfdbfe'}}>
-              <p style={{fontSize: '14px', color: '#1e40af', marginBottom: '8px'}}>
+            <div className="mobile-info-box" style={{marginTop: '32px', padding: '20px', background: '#eff6ff', borderRadius: '12px', border: '2px solid #bfdbfe'}}>
+              <p className="mobile-info-text" style={{fontSize: '14px', color: '#1e40af', marginBottom: '8px'}}>
                 <CheckCircle size={16} style={{display: 'inline', marginRight: '6px'}} />
                 You'll receive a verification email after signing up.
               </p>
-              <p style={{fontSize: '14px', color: '#1e40af', marginBottom: '8px'}}>
+              <p className="mobile-info-text" style={{fontSize: '14px', color: '#1e40af', marginBottom: '8px'}}>
                 <CheckCircle size={16} style={{display: 'inline', marginRight: '6px'}} />
                 Only verified users receive alerts.
               </p>
-              <p style={{fontSize: '14px', color: '#10b981', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px'}}>
-                <Shield size={16} style={{display: 'inline', flexShrink: 0}} />
+              <p className="mobile-info-text" style={{fontSize: '14px', color: '#10b981', marginBottom: '8px', display: 'flex', alignItems: 'flex-start', gap: '6px'}}>
+                <Shield size={16} style={{display: 'inline', flexShrink: 0, marginTop: '2px'}} />
                 <span>
                   Your data is encrypted and secure.{' '}
                   <button
@@ -838,24 +1177,24 @@ export default function SnowDayAlertSystem() {
                       padding: 0,
                       fontWeight: '600'
                     }}
+                    aria-label="Learn more about security"
                   >
                     Learn more
                   </button>
                 </span>
               </p>
-              <p style={{ fontSize: '14px', color: '#6b21a8' }}>
+              <p className="mobile-info-text" style={{ fontSize: '14px', color: '#6b21a8' }}>
                 Issues? Feel Free to Email{' '}
                 <a
                   href="mailto:TaranshG.Dev@gmail.com?subject=Snow%20Day%20Notifier%20Issue"
-                  style={{ color: '#6b21a8', fontWeight: 700, textDecoration: 'underline' }}
+                  style={{ color: '#6b21a8', fontWeight: 700, textDecoration: 'underline', wordBreak: 'break-all' }}
                 >
                   TaranshG.Dev@gmail.com
                 </a>
               </p>
-              <p style={{ fontSize: '12px', color: '#1e40af' }}>
+              <p className="mobile-info-text" style={{ fontSize: '12px', color: '#1e40af' }}>
                 This is a student-run project and is independent of McMaster University :D
               </p>
-              {/* Builder credit */}
               <div style={{
                 marginTop: '28px',
                 paddingTop: '16px',
@@ -880,22 +1219,21 @@ export default function SnowDayAlertSystem() {
                 >
                   Taransh Goyal <Linkedin size={14} />
                 </a>
-                </div>
-
+              </div>
             </div>
           </div>
         )}
 
         {view === 'success' && (
-          <div style={styles.card}>
+          <div style={styles.card} className="mobile-card">
             <div style={{textAlign: 'center'}}>
-              <CheckCircle size={80} color="#10b981" style={{margin: '0 auto 24px'}} />
-              <h2 style={{fontSize: '36px', fontWeight: 'bold', color: '#111827', marginBottom: '16px'}}>
+              <CheckCircle className="mobile-success-icon" size={80} color="#10b981" style={{margin: '0 auto 24px'}} />
+              <h2 className="mobile-success-title" style={{fontSize: '36px', fontWeight: 'bold', color: '#111827', marginBottom: '16px'}}>
                 You're Almost There! 🎉
               </h2>
-              <p style={{color: '#6b7280', marginBottom: '32px', lineHeight: '1.6'}}>
+              <p className="mobile-success-text" style={{color: '#6b7280', marginBottom: '32px', lineHeight: '1.6'}}>
                 We've sent a verification email to<br />
-                <strong style={{color: '#3b82f6', fontSize: '18px'}}>{submittedEmail}</strong>
+                <strong style={{color: '#3b82f6', fontSize: '18px', wordBreak: 'break-all'}}>{submittedEmail}</strong>
                 <br /><br />
                 Click the link to activate your snow day alerts. If you don't see the email, please check your spam folder :D
               </p>
@@ -906,6 +1244,7 @@ export default function SnowDayAlertSystem() {
                   width: 'auto',
                   padding: '12px 32px'
                 }}
+                aria-label="Return to signup form"
               >
                 ← Back to Home
               </button>
