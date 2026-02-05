@@ -377,93 +377,6 @@ export default function SnowDayAlertSystem() {
             display: flex !important;
           }
         }
-
-        /* Mobile-specific optimizations */
-        @media (max-width: 768px) {
-          .mobile-card {
-            padding: 24px !important;
-            border-radius: 20px !important;
-          }
-          .mobile-main {
-            padding: 24px 16px !important;
-          }
-          .mobile-header-content {
-            padding: 16px 20px !important;
-          }
-          .mobile-title {
-            font-size: 20px !important;
-          }
-          .mobile-subtitle {
-            font-size: 13px !important;
-          }
-          .mobile-logo-icon {
-            padding: 10px !important;
-          }
-          .mobile-heading {
-            font-size: 26px !important;
-            line-height: 1.2 !important;
-          }
-          .mobile-description {
-            font-size: 15px !important;
-          }
-          .mobile-input {
-            padding: 12px 14px !important;
-            font-size: 16px !important;
-          }
-          .mobile-label {
-            font-size: 13px !important;
-          }
-          .mobile-submit-button {
-            padding: 16px !important;
-            font-size: 17px !important;
-          }
-          .mobile-info-box {
-            padding: 16px !important;
-            font-size: 13px !important;
-          }
-          .mobile-control-buttons {
-            top: 12px !important;
-            right: 12px !important;
-            gap: 6px !important;
-          }
-          .mobile-control-button {
-            padding: 10px !important;
-          }
-          .mobile-share-panel {
-            padding: 32px 24px !important;
-            max-width: 100% !important;
-          }
-          .mobile-security-modal {
-            padding: 24px !important;
-            width: 95% !important;
-            max-width: 95% !important;
-          }
-          .mobile-security-content {
-            font-size: 14px !important;
-          }
-          .mobile-security-heading {
-            font-size: 20px !important;
-          }
-        }
-
-        /* Extra small mobile devices */
-        @media (max-width: 480px) {
-          .mobile-card {
-            padding: 20px !important;
-          }
-          .mobile-heading {
-            font-size: 24px !important;
-          }
-          .mobile-qr-container {
-            width: 200px !important;
-            height: 200px !important;
-            padding: 15px !important;
-          }
-          .mobile-qr-image {
-            width: 170px !important;
-            height: 170px !important;
-          }
-        }
       
       `}</style>
 
@@ -486,11 +399,10 @@ export default function SnowDayAlertSystem() {
         />
       ))}
 
-      <div style={styles.controlButtons} className="mobile-control-buttons">
+      <div style={styles.controlButtons}>
         <button 
           onClick={toggleSnow} 
           style={styles.controlButton}
-          className="mobile-control-button"
           title={snowEnabled ? "Disable snow" : "Enable snow"}
         >
           {snowEnabled ? (
@@ -502,7 +414,6 @@ export default function SnowDayAlertSystem() {
         <button 
           onClick={toggleMusic} 
           style={styles.controlButton}
-          className="mobile-control-button"
           title={isMusicPlaying ? "Mute music" : "Play music"}
         >
           {isMusicPlaying ? <Volume2 color="white" size={24} /> : <VolumeX color="white" size={24} />}
@@ -531,7 +442,7 @@ export default function SnowDayAlertSystem() {
         <Share2 color="white" size={28} />
       </div>
 
-      <div style={styles.sharePanel} className="mobile-share-panel">
+      <div style={styles.sharePanel}>
         <button
           onClick={() => setSharePanel(false)}
           style={{
@@ -570,12 +481,11 @@ export default function SnowDayAlertSystem() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'
-        }} className="mobile-qr-container">
+        }}>
           <img 
             src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(window.location.href)}`}
             alt="QR Code"
             style={{width: '200px', height: '200px'}}
-            className="mobile-qr-image"
           />
         </div>
 
@@ -678,7 +588,7 @@ export default function SnowDayAlertSystem() {
             boxShadow: '0 25px 50px rgba(0,0,0,0.3)',
             maxHeight: '80vh',
             overflowY: 'auto'
-          }} className="mobile-security-modal">
+          }}>
             <button
               onClick={() => setShowSecurityModal(false)}
               style={{
@@ -696,12 +606,12 @@ export default function SnowDayAlertSystem() {
 
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
               <Shield size={48} color="#10b981" style={{ margin: '0 auto 16px' }} />
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827', marginBottom: '8px' }} className="mobile-security-heading">
+              <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827', marginBottom: '8px' }}>
                 Your Data is Secure
               </h2>
             </div>
 
-            <div style={{ color: '#374151', lineHeight: '1.7', fontSize: '15px' }} className="mobile-security-content">
+            <div style={{ color: '#374151', lineHeight: '1.7', fontSize: '15px' }}>
               <h3 style={{ fontWeight: '600', marginBottom: '12px', color: '#111827' }}>
                 How we protect your information:
               </h3>
@@ -709,21 +619,21 @@ export default function SnowDayAlertSystem() {
               <div style={{ marginBottom: '16px' }}>
                 <strong style={{ color: '#1e40af' }}>🔒 Encrypted Storage:</strong>
                 <p style={{ marginTop: '4px', color: '#6b7280' }}>
-                  All data is stored in Supabase, a secure cloud database with enterprise-grade encryption. Your email and phone number are protected with industry-standard security measures.
+                  Your email and phone number are stored securely using encrypted databases and strict access controls.
                 </p>
               </div>
 
               <div style={{ marginBottom: '16px' }}>
                 <strong style={{ color: '#1e40af' }}>✉️ Email Verification:</strong>
                 <p style={{ marginTop: '4px', color: '#6b7280' }}>
-                  We use SendGrid, a trusted email service, to send verification emails. Your email is verified before you receive any alerts, preventing spam and unauthorized subscriptions.
+                  We verify your email before sending alerts to prevent spam and unauthorized subscriptions.
                 </p>
               </div>
 
               <div style={{ marginBottom: '16px' }}>
                 <strong style={{ color: '#1e40af' }}>🚫 No Data Sharing:</strong>
                 <p style={{ marginTop: '4px', color: '#6b7280' }}>
-                  We never sell, rent, or share your personal information with third parties. Your data is only used to send you snow day alerts.
+                  We never sell, rent, or share your personal information. Your data is used <strong>only</strong> to send snow day notifications.
                 </p>
               </div>
 
@@ -735,7 +645,7 @@ export default function SnowDayAlertSystem() {
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <strong style={{ color: '#1e40af' }}>🔐 Secure Tokens:</strong>
+                <strong style={{ color: '#1e40af' }}>🔐 Protected Links:</strong>
                 <p style={{ marginTop: '4px', color: '#6b7280' }}>
                   All verification and unsubscribe links use unique, randomly-generated tokens that expire to prevent unauthorized access.
                 </p>
@@ -776,32 +686,32 @@ export default function SnowDayAlertSystem() {
       )}
 
       <header style={styles.header}>
-        <div style={styles.headerContent} className="mobile-header-content">
+        <div style={styles.headerContent}>
           <div style={styles.logoContainer}>
-            <div style={styles.logoIcon} className="mobile-logo-icon">
+            <div style={styles.logoIcon}>
               <Bell color="white" size={32} />
             </div>
             <div>
-              <h1 style={styles.title} className="mobile-title">McMaster Snow Day</h1>
-              <p style={styles.subtitle} className="mobile-subtitle">Never miss a snow day alert</p>
+              <h1 style={styles.title}>McMaster Snow Day</h1>
+              <p style={styles.subtitle}>Never miss a snow day alert</p>
             </div>
           </div>
         </div>
       </header>
 
-      <main style={styles.main} className="mobile-main">
+      <main style={styles.main}>
         {view === 'signup' && (
-          <div style={styles.card} className="mobile-card">
-            <h2 style={{fontSize: '32px', fontWeight: 'bold', color: '#111827', marginBottom: '8px', textAlign: 'center'}} className="mobile-heading">
+          <div style={styles.card}>
+            <h2 style={{fontSize: '32px', fontWeight: 'bold', color: '#111827', marginBottom: '8px', textAlign: 'center'}}>
               Get Instant Snow Day Alerts ❄️
             </h2>
-            <p style={{color: '#6b7280', marginBottom: '32px', textAlign: 'center', lineHeight: '1.6'}} className="mobile-description">
+            <p style={{color: '#6b7280', marginBottom: '32px', textAlign: 'center', lineHeight: '1.6'}}>
               Sign up to receive instant notifications when McMaster announces a snow day
             </p>
 
             <form onSubmit={handleSubmit}>
               <div style={styles.formGroup}>
-                <label style={styles.label} className="mobile-label">
+                <label style={styles.label}>
                   Email Address
                 </label>
                 <input
@@ -810,13 +720,12 @@ export default function SnowDayAlertSystem() {
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   style={styles.input}
-                  className="mobile-input"
                   required
                 />
               </div>
 
               <div style={styles.formGroup}>
-                <label style={styles.label} className="mobile-label">
+                <label style={styles.label}>
                   Phone Number (Optional for SMS)
                 </label>
                 <input
@@ -825,7 +734,6 @@ export default function SnowDayAlertSystem() {
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                   style={styles.input}
-                  className="mobile-input"
                 />
               </div>
 
@@ -860,7 +768,6 @@ export default function SnowDayAlertSystem() {
                   opacity: (isSubmitting || !formData.consent) ? 0.7 : 1,
                   cursor: (isSubmitting || !formData.consent) ? 'not-allowed' : 'pointer'
                 }}
-                className="mobile-submit-button"
                 disabled={isSubmitting || !formData.consent}
               >
                 <Bell size={20} />
@@ -883,7 +790,7 @@ export default function SnowDayAlertSystem() {
               </div>
             )}
 
-            <div style={{marginTop: '32px', padding: '20px', background: '#eff6ff', borderRadius: '12px', border: '2px solid #bfdbfe'}} className="mobile-info-box">
+            <div style={{marginTop: '32px', padding: '20px', background: '#eff6ff', borderRadius: '12px', border: '2px solid #bfdbfe'}}>
               <p style={{fontSize: '14px', color: '#1e40af', marginBottom: '8px'}}>
                 <CheckCircle size={16} style={{display: 'inline', marginRight: '6px'}} />
                 You'll receive a verification email after signing up.
@@ -957,13 +864,13 @@ export default function SnowDayAlertSystem() {
         )}
 
         {view === 'success' && (
-          <div style={styles.card} className="mobile-card">
+          <div style={styles.card}>
             <div style={{textAlign: 'center'}}>
               <CheckCircle size={80} color="#10b981" style={{margin: '0 auto 24px'}} />
-              <h2 style={{fontSize: '36px', fontWeight: 'bold', color: '#111827', marginBottom: '16px'}} className="mobile-heading">
+              <h2 style={{fontSize: '36px', fontWeight: 'bold', color: '#111827', marginBottom: '16px'}}>
                 You're Almost There! 🎉
               </h2>
-              <p style={{color: '#6b7280', marginBottom: '32px', lineHeight: '1.6'}} className="mobile-description">
+              <p style={{color: '#6b7280', marginBottom: '32px', lineHeight: '1.6'}}>
                 We've sent a verification email to<br />
                 <strong style={{color: '#3b82f6', fontSize: '18px'}}>{submittedEmail}</strong>
                 <br /><br />
@@ -976,7 +883,6 @@ export default function SnowDayAlertSystem() {
                   width: 'auto',
                   padding: '12px 32px'
                 }}
-                className="mobile-submit-button"
               >
                 ← Back to Home
               </button>
