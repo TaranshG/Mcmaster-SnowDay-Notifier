@@ -2,13 +2,9 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-// Brevo setup
-const SibApiV3Sdk = require('@getbrevo/brevo');
-const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-apiInstance.setApiKey(
-  SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
-  process.env.BREVO_API_KEY
-);
+// SendGrid setup
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const { createClient } = require('@supabase/supabase-js');
 
@@ -150,18 +146,20 @@ app.post('/api/signup', async (req, res) => {
 </html>
 `;
 
-    // Send with Brevo
-    const sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-    
-    sendSmtpEmail.sender = { 
-      name: "McMaster Snow Day Alerts", 
-      email: process.env.BREVO_SENDER_EMAIL
-    };
-    sendSmtpEmail.to = [{ email: email }];
-    sendSmtpEmail.subject = "Confirm your email for snow day alerts";
-    sendSmtpEmail.htmlContent = html;
+    // Send with SendGrid
+    const fromEmail = process.env.SENDGRID_FROM_EMAIL;
+    if (!fromEmail) {
+      return res.status(500).json({ error: "SENDGRID_FROM_EMAIL is missing in env" });
+    }
 
-    await apiInstance.sendTransacEmail(sendSmtpEmail);
+    const fromName = process.env.SENDGRID_FROM_NAME || "McMaster Snow Day Alerts";
+
+    await sgMail.send({
+      to: email,
+      from: { email: fromEmail, name: fromName },
+      subject: "Confirm your email for snow day alerts",
+      html,
+    });
 
     return res.status(200).json({ success: true });
   } catch (err) {
