@@ -92,54 +92,90 @@ app.post('/api/signup', async (req, res) => {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Verify your email</title>
   </head>
-  <body style="margin:0;padding:0;background:#f6f7fb;font-family:Arial,sans-serif;">
-    <div style="width:100%;padding:24px 12px;">
-      <div style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;border:1px solid #e5e7eb;color:#111827;">
-        
-        <div style="padding:20px 20px 0;">
-          <div style="font-size:18px;font-weight:700;">McMaster Snow Day Alerts</div>
-          <div style="margin-top:6px;font-size:14px;color:#6b7280;">Confirm your email</div>
+  <body style="margin:0;padding:0;background:#0b1220;">
+    <div style="width:100%;padding:32px 12px;">
+      <div style="
+        max-width:560px;
+        margin:0 auto;
+        background:#ffffff;
+        border-radius:18px;
+        overflow:hidden;
+        box-shadow:0 20px 60px rgba(0,0,0,0.35);
+        font-family: Arial, Helvetica, sans-serif;
+      ">
+
+        <div style="
+          padding:28px 24px;
+          background: linear-gradient(135deg, #1e3a8a 0%, #4c1d95 55%, #581c87 100%);
+          color:#fff;
+          text-align:center;
+        ">
+          <div style="font-size:34px; line-height:1; margin-bottom:10px;">❄️</div>
+          <div style="font-size:20px; font-weight:800; letter-spacing:0.2px;">
+            McMaster Snow Day Alerts
+          </div>
+          <div style="margin-top:8px; font-size:13px; color:rgba(255,255,255,0.85);">
+            Verify your email to start receiving alerts
+          </div>
         </div>
 
-        <div style="padding:16px 20px 20px;">
-          <p style="margin:14px 0 0;font-size:14px;line-height:1.6;color:#374151;">
-            Hi,
+        <div style="padding:26px 24px; color:#111827;">
+          <h1 style="margin:0 0 10px; font-size:20px; line-height:1.3;">
+            You're almost subscribed ✅
+          </h1>
+
+          <p style="margin:0 0 16px; font-size:14px; line-height:1.6; color:#374151;">
+            Click the button below to verify your email. After verification, you’ll get notified when
+            McMaster announces a snow day.
           </p>
 
-          <p style="margin:10px 0 0;font-size:14px;line-height:1.6;color:#374151;">
-            Click the button below to confirm your email and start receiving snow day alerts for McMaster University.
-          </p>
-
-          <div style="margin:24px 0;text-align:center;">
-            <a href="${verifyUrl}" 
-               style="display:inline-block;padding:12px 32px;background:#2563eb;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:600;font-size:14px;">
-              Confirm Email
+          <div style="text-align:center; margin:22px 0 18px;">
+            <a href="${verifyUrl}" style="
+              display:inline-block;
+              background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+              color:#fff;
+              text-decoration:none;
+              font-weight:800;
+              padding:14px 22px;
+              border-radius:12px;
+              box-shadow:0 14px 30px rgba(59,130,246,0.35);
+            ">
+              Verify my email
             </a>
           </div>
 
-          <p style="margin:14px 0 0;font-size:13px;line-height:1.6;color:#6b7280;">
-            Or copy this link:<br/>
-            <a href="${verifyUrl}" style="color:#2563eb;word-break:break-all;font-size:12px;">
+          <div style="
+            padding:14px 14px;
+            background:#f3f4f6;
+            border-radius:12px;
+            border:1px solid #e5e7eb;
+            font-size:12px;
+            line-height:1.5;
+            color:#374151;
+          ">
+            If the button doesn’t work, copy and paste this link:
+            <div style="word-break:break-all; margin-top:8px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">
               ${verifyUrl}
-            </a>
-          </p>
-
-          <p style="margin:16px 0 0;font-size:13px;line-height:1.6;color:#6b7280;">
-            You'll only get an email when McMaster officially announces a snow day. No spam, no ads.
-          </p>
-
-          <p style="margin:14px 0 0;font-size:12px;line-height:1.6;color:#9ca3af;">
-            Didn't sign up? You can safely ignore this email.
-          </p>
-
-          <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e7eb;">
-            <p style="margin:0;font-size:11px;color:#9ca3af;">
-              McMaster Snow Day Alerts<br/>
-              Hamilton, ON, Canada
-            </p>
+            </div>
           </div>
+
+          <p style="margin:18px 0 0; font-size:12px; color:#6b7280; line-height:1.6;">
+            If you didn’t sign up for this, you can ignore this email.
+          </p>
         </div>
+
+        <div style="
+          padding:16px 24px;
+          background:#0b1220;
+          color:rgba(255,255,255,0.7);
+          font-size:12px;
+          text-align:center;
+        ">
+          Built By Mcmaster Students • Built for McMaster students • Stay safe this winter
+        </div>
+
       </div>
     </div>
   </body>
