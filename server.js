@@ -173,7 +173,7 @@ app.post('/api/signup', async (req, res) => {
           font-size:12px;
           text-align:center;
         ">
-          Built By Mcmaster Students • Built for McMaster students • Stay safe this winter
+          Built By Mcmaster Students, For McMaster students • Stay safe this winter
         </div>
 
       </div>
